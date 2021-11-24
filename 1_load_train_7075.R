@@ -13,22 +13,16 @@ library(dplyr)
 library(lumberjack)
 library(readtext)
 
+# Load the text data
 # Pre-processed .txt files are used (without interpunction, stowords removed, all letters to lower case, etc.)
+
+githubURL <- ("https://github.com/MilanvanL/jdh001-9HcfToh7EYm8/raw/main/data/parl_texts_7075b.RDS")
+download.file(githubURL,destfile="parl_texts_7075b.RDS")
+files2 <- readRDS("parl_texts_7075b.RDS")
 
 # Train word2vec model --------------------------------------------------
 
-# load prepared txts in envir
-# create object with directory where files are in
-
 # Train party specific models ---------------------------------------------
-
-# create object with directory where files are in # this is workstation-specific!
-data.dir2 <- c("https://raw.github.com/MilanvanL/jdh001-9HcfToh7EYm8/data/")
-
-
-# load all files with .txt file type. make sure only the txt files needed are in the directory!
-files2 <- readtext(paste0(data.dir2, "raw_texts_parl*" ))
-
 
 # CPN
 # Subset specific year, set as character vector to serve as input for word2vec package
