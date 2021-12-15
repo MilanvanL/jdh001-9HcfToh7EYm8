@@ -202,7 +202,8 @@ score_prol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.p
 score_nonprol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.nv.cda))
 
 # Plotting ----------------------------------------------------------------
-setwd("Q:/Onderzoeksdata_Milan/Surfdrive_milan/Shared/Dialects_of_Discord/Plots_new_milan")
+
+setwd(here("output"))
 
 pdf('plot_7075_parties.pdf', width=8, height=8)
 
