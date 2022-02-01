@@ -11,13 +11,14 @@ library(qdap)
 library(stringr)
 library(dplyr)
 library(readtext)
+library(readr)
 
 # Load the text data
 # Pre-processed .txt files are used (without interpunction, stowords removed, all letters to lower case, etc.)
 
-githubURL <- ("https://github.com/MilanvanL/jdh001-9HcfToh7EYm8/raw/main/data/parl_texts_7075b.RDS")
-download.file(githubURL,destfile="parl_texts_7075b.RDS")
-files2 <- readRDS("parl_texts_7075b.RDS")
+githubURL <- ("https://github.com/MilanvanL/jdh001-9HcfToh7EYm8/raw/main/data/stuff.RDS")
+download.file(githubURL, "stuff.RDS")
+files2 <- readRDS("stuff.RDS")
 
 # Train word2vec model --------------------------------------------------
 
