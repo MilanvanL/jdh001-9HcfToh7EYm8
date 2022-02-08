@@ -10,6 +10,7 @@ library(XML)
 library(qdap)
 library(stringr)
 library(dplyr)
+install.packages("readtext")
 library(readtext)
 library(readr)
 
@@ -206,8 +207,6 @@ score_nonprol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, com
 
 setwd(here("output"))
 
-pdf('plot_7075_parties.pdf', width=8, height=8)
-
 plot(score_prol.pvda$V1, score_nonprol.pvda$V1,ylim=c(0, 1.0), xlim=c(0,1.0), xlab = "Proliferation", ylab = 'Non-proliferation',
 type='p', pch=16, col=c("blue"),
 main="
@@ -220,10 +219,6 @@ abline(a=0,b=1)
 legend('bottomright', legend=c("CPN", "VVD", "PvdA"),
        col=c("red", "black", "blue"), lwd=11, cex=0.8)
            
-#turn off
-dev.off()
-
-
 # The End 
 
 
