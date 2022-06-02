@@ -1,10 +1,10 @@
-# This script tries to use Word2Vec technique on Handelingen data
-# For Dialects of Discord on the party level
-# Milan van Lange, June 2021
+# This script applies the Word2Vec technique on Handelingen data
+# For Dialects of Discord, JDH
+# Ralf Futselaar and Milan van Lange, 2022
 
 library(magrittr)
 library(tm)
-@remotes::install_github("bnosac/word2vec")
+#remotes::install_github("bnosac/word2vec")
 library(word2vec)
 library(XML)
 library(qdap)
