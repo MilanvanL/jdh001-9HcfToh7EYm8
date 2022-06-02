@@ -4,7 +4,7 @@
 
 library(magrittr)
 library(tm)
-remotes::install_github("bnosac/word2vec")
+@remotes::install_github("bnosac/word2vec")
 library(word2vec)
 library(XML)
 library(qdap)
@@ -15,11 +15,13 @@ library(readtext)
 library(readr)
 
 # Load the text data
-# Pre-processed .txt files are used (without interpunction, stowords removed, all letters to lower case, etc.)
+# Pre-processed .csv files are used (without interpunction, stowords removed, all letters to lower case, etc.)
 
-githubURL <- ("https://github.com/MilanvanL/jdh001-9HcfToh7EYm8/raw/main/data/stuff.RDS")
-download.file(githubURL, "stuff.RDS")
-files2 <- readRDS("stuff.RDS")
+# Download parliamentary texts (.csv) from github
+url_to_file <- "https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv"
+
+# Read parliamentary texts into RStudio Environment as data.frame
+files2 <- read.csv(url(url_to_file))
 
 # Train word2vec model --------------------------------------------------
 
