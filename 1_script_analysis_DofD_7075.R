@@ -13,15 +13,17 @@ library(dplyr)
 install.packages("readtext")
 library(readtext)
 library(readr)
+library(RCurl)
 
 # Load the text data
 # Pre-processed .csv files are used (without interpunction, stowords removed, all letters to lower case, etc.)
 
 # Download parliamentary texts (.csv) from github
-url_to_file <- "https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv"
+files <- getURL("https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv")
 
 # Read parliamentary texts into RStudio Environment as data.frame
-files2 <- read.csv(url(url_to_file))
+files2 <- read.csv(text = files)
+
 
 # Train word2vec model --------------------------------------------------
 
