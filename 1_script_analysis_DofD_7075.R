@@ -22,7 +22,7 @@ library(RCurl)
 files <- getURL("https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv")
 
 # Read parliamentary texts into RStudio Environment as data.frame
-files2 <- read.csv(text = files)
+files2 <- read.csv(text = files, encoding="UTF-8")
 
 
 # Train word2vec model --------------------------------------------------
