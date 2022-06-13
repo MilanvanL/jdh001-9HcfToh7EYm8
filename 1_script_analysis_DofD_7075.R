@@ -1,24 +1,28 @@
-# This script applies the Word2Vec technique on Handelingen data
-# For Dialects of Discord, JDH
-# Ralf Futselaar and Milan van Lange, 2022
+# This is the script for the analysis of parliamentary texts as used in the article: 
+# Dialects of Discord. Changing vocabularies in the Dutch Cruise Missile Discussion, Journal of Digital History, 2022.
+# By Ralf Futselaar and Milan van Lange.
 
+# This script applies the Word2Vec technique on Dutch parliamentary data (Handelingen der Staten-Generaal).
+# The bnosac Word2Vec package is used to train Word Embedding Models. See also https://github.com/bnosac/word2vec. 
+
+# Load installed packages from library
 library(magrittr)
 library(tm)
-#remotes::install_github("bnosac/word2vec")
 library(word2vec)
 library(XML)
 library(qdap)
 library(stringr)
 library(dplyr)
-install.packages("readtext")
 library(readtext)
 library(readr)
 library(RCurl)
 
 # Load the text data
-# Pre-processed .csv files are used (without interpunction, stowords removed, all letters to lower case, etc.)
-
-# Download parliamentary texts (.csv) from github
+# A pre-processed version of parliamentary texts is used. 
+# Punctuation and stop words are removed from the texts and all letters are set to lower case. 
+# Functions removePunctuation, removeWords, and tolower from package 'tm' are used.
+# The pre-processed text data are stored as .csv-file on GitHub.
+# The parliamentary texts can be downloaded from GitHub using the following command:
 files <- getURL("https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv")
 
 # Read parliamentary texts into RStudio Environment as data.frame
