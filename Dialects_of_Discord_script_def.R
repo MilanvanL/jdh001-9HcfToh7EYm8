@@ -11,14 +11,9 @@
 
 # Load installed packages from library
 library(magrittr)
-library(tm)
 library(word2vec)
-library(XML)
-library(qdap)
 library(stringr)
 library(dplyr)
-library(readtext)
-library(readr)
 library(RCurl)
 library(data.table)
 
