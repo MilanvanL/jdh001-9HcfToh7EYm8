@@ -20,17 +20,16 @@ library(dplyr)
 library(readtext)
 library(readr)
 library(RCurl)
+library(data.table)
 
 # Load the text data
 # A pre-processed version of parliamentary texts is used. 
 # Punctuation and stop words are removed from the texts and all letters are set to lower case. 
 # Functions removePunctuation, removeWords, and tolower from package 'tm' are used.
 # The pre-processed text data are stored as a single .csv-file on GitHub.
-# This file can be downloaded from GitHub using the following command:
-files <- getURL("https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv")
 
-# Read the file into the RStudio Environment as data.frame
-files2 <- read.csv(text = files, encoding="UTF-8")
+# This file can be downloaded from GitHub and loaded into the RStudio environment using the following command:
+files2 <- data.table::fread("https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv", header=TRUE, encoding="UTF-8" )
 
 # Subset party-specific data and train word2vec model for each party--------------------------------------------------
 
