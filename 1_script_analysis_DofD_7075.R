@@ -1,9 +1,13 @@
 # This is the script for the analysis of parliamentary texts as used in the article: 
-# Dialects of Discord. Changing vocabularies in the Dutch Cruise Missile Discussion, Journal of Digital History, 2022.
+# 'Dialects of Discord. Changing vocabularies in the Dutch Cruise Missile Discussion', Journal of Digital History, 2022.
 # By Ralf Futselaar and Milan van Lange.
 
 # This script applies the Word2Vec technique on Dutch parliamentary data (Handelingen der Staten-Generaal).
 # The bnosac Word2Vec package is used to train Word Embedding Models. See also https://github.com/bnosac/word2vec. 
+
+# This script is meantfor demonstration purposes. It uses data from the 1970-1975 period. The article uses mroe data, 
+# for more periods, but these are not included in this example, because of space constraints. The authors will be happy 
+# to provide all data on request. 
 
 # Load installed packages from library
 library(magrittr)
@@ -21,98 +25,77 @@ library(RCurl)
 # A pre-processed version of parliamentary texts is used. 
 # Punctuation and stop words are removed from the texts and all letters are set to lower case. 
 # Functions removePunctuation, removeWords, and tolower from package 'tm' are used.
-# The pre-processed text data are stored as .csv-file on GitHub.
-# The parliamentary texts can be downloaded from GitHub using the following command:
+# The pre-processed text data are stored as a single .csv-file on GitHub.
+# This file can be downloaded from GitHub using the following command:
 files <- getURL("https://raw.githubusercontent.com/jdh-observer/jdh001-9HcfToh7EYm8/main/parl_texts_7075.csv")
 
-# Read parliamentary texts into RStudio Environment as data.frame
+# Read the file into the RStudio Environment as data.frame
 files2 <- read.csv(text = files, encoding="UTF-8")
 
+# Subset party-specific data and train word2vec model for each party--------------------------------------------------
 
-# Train word2vec model --------------------------------------------------
-
-# Train party specific models ---------------------------------------------
-
-# CPN
-# Subset specific year, set as character vector to serve as input for word2vec package
+# 1. CPN (Communistische Partij Nederland)
+# Subset period and party, set column "text" as character vector to serve as input for word2vec package
 files2 %>%
   filter(str_detect(doc_id, "cpn")) -> cpn.7075
-
-# set as character
 cpn.7075 <- as.character(cpn.7075$text)
 
-# train model
-# train word2vec
+# Train word2vec model
 model.cpn.7075 <- word2vec(x = cpn.7075, min_count = 5, threads = 4, type = 'skip-gram', dim = 100, iter = 20 )
 
-# create matrix
+# Create matrix
 emb.cpn.7075 <- as.matrix(model.cpn.7075)
 
-# VVD
-
-# Subset specific year, set as character vector to serve as input for word2vec package
+# 2. VVD (Volkspartij voor Vrijheid en Democratie)
+# Subset period and party, set column "text" as character vector to serve as input for word2vec package
 files2 %>%
   filter(str_detect(doc_id, "vvd")) -> vvd.7075
-
-# set as character
 vvd.7075 <- as.character(vvd.7075$text)
 
-# train model
-# train word2vec
+# Train word2vec model
 model.vvd.7075 <- word2vec(x = vvd.7075, min_count = 5, threads = 4, type = 'skip-gram', dim = 100)
 
-# create matrix
+# Create matrix
 emb.vvd.7075 <- as.matrix(model.vvd.7075)
 
-# PvdA
-
-# Subset specific year, set as character vector to serve as input for word2vec package
+# 3. PvdA (Partij van de Arbeid)
+# Subset period and party, set column "text" as character vector to serve as input for word2vec package
 files2 %>%
   filter(str_detect(doc_id, "pvda")) -> pvda.7075
-
-# set as character
 pvda.7075 <- as.character(pvda.7075$text)
 
-# train model
-# train word2vec
+# Train word2vec model
 model.pvda.7075 <- word2vec(x = pvda.7075, min_count = 5, threads = 4, type = 'skip-gram', dim = 100)
 
-# create matrix
+# Create matrix
 emb.pvda.7075 <- as.matrix(model.pvda.7075)
 
-# CDA
+# 4. CDA (Christen-Democratische Appel) (NOTE: this party did not yet exist before 1980) 
 # Subset specific year, set as character vector to serve as input for word2vec package
 files2 %>%
   filter(str_detect(doc_id, "cda")) -> cda.7075
-
-# set as character
 cda.7075 <- as.character(cda.7075$text)
 
-# train model
-# train word2vec
+# Train word2vec model
 model.cda.7075 <- word2vec(x = cda.7075, min_count = 5, threads = 4, type = 'skip-gram', dim = 100)
 
-# create matrix
+# Create matrix
 emb.cda.7075 <- as.matrix(model.cda.7075)
 
-# Training complete, go to analysis in next script 2_analyse_plot_7075_parties.R (see below)
+# Now that we have trained the models we continue with the analysis.
 
-# Script 2 
-# This script analyses and plots the data prepared in 1_load_train.R
-# Dialects of Discord, Milan van Lange and Ralf Futselaar, 2021
-
-# Create variables per party ----------------------------------------------------------------
-
-# Create the word lists (they are generic as they are not party-specific)
+# Create the word lists in the RStudio environment. These lists are generic as they are used for every party.
 words.weapon <-  c("kernwapen", "kernwapens", "atoomwapen", "atoomwapens", "kruisraket", "kruisraketten", "kruisvluchtwapen", "kruisvluchtwapens", "lanceraket", "lanceraketten", "navokernwapen", "navokernwapens" )
 words.prol <- c("afschrikking",  "tactischnucleaire",  "proliferatieverdrag",  "strategischnucleaire", "proliferatie", "afschrikkingsevenwicht",  "afschrikkingsstrategie", "atoomparaplu", "waarborgenstelsel", "kernwapenstrategie" , "afschrikwekkende", "afschrikkingstheorie", "deterrent", "afschrikkingsfunctie", "afschrikkingspolitiek", "afschrikkingsrol", "afschrikkingswapen", "afschrikkingswapens", "afschrikkingsmacht") 
 words.nonprol <- c("ontwapening", "nonproliferatieverdrag", "kernwapenvrije", "kernwapenvrij", "denuclearisatie", "atoomvrije", "nonproliferatie",  "wapenbeperking", "wapenbeheersingsbesprekingen", "ontwapeningsbesprekingen", "kernstop", "ontwapeningsoverleg", "denuclearisering", "atoomvrij",   "gedenucleariseerd", "wapenbeheersing", "ontwapeningsonderhandelingen", "wapenbeheersingsonderhandelingen", "wapenvermindering") 
 
-# CPN
+# Use the trained word2vec models and the word lists for analysis
+
+# 1. CPN
 # Create 'kernwapen' vector 
 wv.cpn <- predict(model.cpn.7075, newdata = words.weapon, type = "embedding")
 wv.cpn <- na.omit(wv.cpn)
-comb.wv.cpn <- colMeans(wv.cpn) # this seems to work good, but there is an alternative approach: comb.wv <- wv["kernwapen", ] + wv["kernwapens", ]  + wv["atoomwapens", ] + wv["atoomwapen", ] #+ wv["kruisraket", ] + wv["kruisraketten", ] + wv["kruisvluchtwapen", ]+ wv["kruisvluchtwapens", ]
+comb.wv.cpn <- colMeans(wv.cpn) 
 
 # Extract 100 nearest neighbours from 'kernwapen' in vector space
 nns_wv.cpn <- predict(model.cpn.7075, newdata = comb.wv.cpn, type="nearest", top_n=100)
@@ -128,17 +111,17 @@ nv.cpn <- predict(model.cpn.7075, newdata = words.nonprol, type = "embedding")
 nv.cpn <- na.omit(nv.cpn)
 comb.nv.cpn <- colMeans(nv.cpn) 
 
-# Calculate distance (cosine similarity) to plot results  ---------------------------------
+# Calculate distance (cosine similarity). We use these scores to plot the results 
 
-# Create scores for plotting by comparing vectors of 'kernwapen' and viewpoints
+# Create scores for plotting by comparing vectors of 'kernwapen' and proliferation vs non-proliferation
 score_prol.cpn <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cpn, comb.pv.cpn))
 score_nonprol.cpn <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cpn, comb.nv.cpn))
 
-# VVD
+# 2. VVD
 # Create 'kernwapen' vector 
 wv.vvd <- predict(model.vvd.7075, newdata = words.weapon, type = "embedding")
 wv.vvd <- na.omit(wv.vvd)
-comb.wv.vvd <- colMeans(wv.vvd) # this seems to work good, but there is an alternative approach: comb.wv <- wv["kernwapen", ] + wv["kernwapens", ]  + wv["atoomwapens", ] + wv["atoomwapen", ] #+ wv["kruisraket", ] + wv["kruisraketten", ] + wv["kruisvluchtwapen", ]+ wv["kruisvluchtwapens", ]
+comb.wv.vvd <- colMeans(wv.vvd) 
 
 # Extract 100 nearest neighbours from 'kernwapen' in vector space
 nns_wv.vvd <- predict(model.vvd.7075, newdata = comb.wv.vvd, type="nearest", top_n=100)
@@ -154,17 +137,17 @@ nv.vvd <- predict(model.vvd.7075, newdata = words.nonprol, type = "embedding")
 nv.vvd <- na.omit(nv.vvd)
 comb.nv.vvd <- colMeans(nv.vvd) 
 
-# Calculate distance (cosine similarity) to plot results  ---------------------------------
+# Calculate distance (cosine similarity). We use these scores to plot the results
 
-# Create scores for plotting by comparing vectors of 'kernwapen' and viewpoints
+# Create scores for plotting by comparing vectors of 'kernwapen' and proliferation vs non-proliferation
 score_prol.vvd <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.vvd, comb.pv.vvd))
 score_nonprol.vvd <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.vvd, comb.nv.vvd))
 
-# PvdA
+# 3. PvdA
 # Create 'kernwapen' vector 
 wv.pvda <- predict(model.pvda.7075, newdata = words.weapon, type = "embedding")
 wv.pvda <- na.omit(wv.pvda)
-comb.wv.pvda <- colMeans(wv.pvda) # this seems to work good, but there is an alternative approach: comb.wv <- wv["kernwapen", ] + wv["kernwapens", ]  + wv["atoomwapens", ] + wv["atoomwapen", ] #+ wv["kruisraket", ] + wv["kruisraketten", ] + wv["kruisvluchtwapen", ]+ wv["kruisvluchtwapens", ]
+comb.wv.pvda <- colMeans(wv.pvda)
 
 # Extract 100 nearest neighbours from 'kernwapen' in vector space
 nns_wv.pvda <- predict(model.pvda.7075, newdata = comb.wv.pvda, type="nearest", top_n=100)
@@ -180,17 +163,17 @@ nv.pvda <- predict(model.pvda.7075, newdata = words.nonprol, type = "embedding")
 nv.pvda <- na.omit(nv.pvda)
 comb.nv.pvda <- colMeans(nv.pvda) 
 
-# Calculate distance (cosine similarity) to plot results  ---------------------------------
+# Calculate distance (cosine similarity). We use these scores to plot the results 
 
-# Create scores for plotting by comparing vectors of 'kernwapen' and viewpoints
+# Create scores for plotting by comparing vectors of 'kernwapen' and proliferation vs non-proliferation
 score_prol.pvda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.pvda, comb.pv.pvda))
 score_nonprol.pvda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.pvda, comb.nv.pvda))
 
-# CDA
+# 4. CDA
 # Create 'kernwapen' vector 
 wv.cda <- predict(model.cda.7075, newdata = words.weapon, type = "embedding")
 wv.cda <- na.omit(wv.cda)
-comb.wv.cda <- colMeans(wv.cda) # this seems to work good, but there is an alternative approach: comb.wv <- wv["kernwapen", ] + wv["kernwapens", ]  + wv["atoomwapens", ] + wv["atoomwapen", ] #+ wv["kruisraket", ] + wv["kruisraketten", ] + wv["kruisvluchtwapen", ]+ wv["kruisvluchtwapens", ]
+comb.wv.cda <- colMeans(wv.cda) 
 
 # Extract 100 nearest neighbours from 'kernwapen' in vector space
 nns_wv.cda <- predict(model.cda.7075, newdata = comb.wv.cda, type="nearest", top_n=100)
@@ -206,15 +189,17 @@ nv.cda <- predict(model.cda.7075, newdata = words.nonprol, type = "embedding")
 nv.cda <- na.omit(nv.cda)
 comb.nv.cda <- colMeans(nv.cda) 
 
-# Calculate distance (cosine similarity) to plot results  ---------------------------------
-# Create scores for plotting by comparing vectors of 'kernwapen' and viewpoints
+# Calculate distance (cosine similarity). We use these scores to plot the results
+
+# Create scores for plotting by comparing vectors of 'kernwapen' and proliferation vs non-proliferation
 score_prol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.pv.cda))
 score_nonprol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.nv.cda))
 
-# Plotting ----------------------------------------------------------------
-
+# Plot the results ----------------------------------------------------------------
+# Set working directory to make sure the outputs appear in the right place
 setwd(here("output"))
 
+# Create the plot, plot scores for each party, use a different colour for each party.
 plot(score_prol.pvda$V1, score_nonprol.pvda$V1,ylim=c(0, 1.0), xlim=c(0,1.0), xlab = "Proliferation", ylab = 'Non-proliferation',
 type='p', pch=16, col=c("blue"),
 main="
@@ -223,7 +208,11 @@ main="
 points(score_prol.cpn$V1, score_nonprol.cpn$V1, pch=16, col=c("red"))
 points(score_prol.vvd$V1, score_nonprol.vvd$V1, pch=16, col=c("black"))
 #points(score_prol.cda$V1, score_nonprol.cda$V1, pch=16, col=c("green"))
+
+# Plot abline
 abline(a=0,b=1)
+
+# Create legend
 legend('bottomright', legend=c("CPN", "VVD", "PvdA"),
        col=c("red", "black", "blue"), lwd=11, cex=0.8)
            
