@@ -64,17 +64,17 @@ model.pvda.7075 <- word2vec(x = pvda.7075, min_count = 5, threads = 4, type = 's
 # Create matrix
 emb.pvda.7075 <- as.matrix(model.pvda.7075)
 
-# 4. CDA (Christen-Democratische Appel) (NOTE: this party did not yet exist before 1980) 
+# 4. CDA (Christen-Democratische Appel) (NOTE: this party did not yet exist before 1980. Therefore the CDA is skipped in this example using '#') 
 # Subset specific year, set as character vector to serve as input for word2vec package
-files2 %>%
-  filter(str_detect(doc_id, "cda")) -> cda.7075
-cda.7075 <- as.character(cda.7075$text)
+#files2 %>%
+#  filter(str_detect(doc_id, "cda")) -> cda.7075
+#cda.7075 <- as.character(cda.7075$text)
 
 # Train word2vec model
-model.cda.7075 <- word2vec(x = cda.7075, min_count = 5, threads = 4, type = 'skip-gram', dim = 100)
+#model.cda.7075 <- word2vec(x = cda.7075, min_count = 5, threads = 4, type = 'skip-gram', dim = 100)
 
 # Create matrix
-emb.cda.7075 <- as.matrix(model.cda.7075)
+#emb.cda.7075 <- as.matrix(model.cda.7075)
 
 # Now that we have trained the models we continue with the analysis.
 
@@ -165,29 +165,29 @@ score_nonprol.pvda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.pvda, c
 
 # 4. CDA
 # Create 'kernwapen' vector 
-wv.cda <- predict(model.cda.7075, newdata = words.weapon, type = "embedding")
-wv.cda <- na.omit(wv.cda)
-comb.wv.cda <- colMeans(wv.cda) 
+#wv.cda <- predict(model.cda.7075, newdata = words.weapon, type = "embedding")
+#wv.cda <- na.omit(wv.cda)
+#comb.wv.cda <- colMeans(wv.cda) 
 
 # Extract 100 nearest neighbours from 'kernwapen' in vector space
-nns_wv.cda <- predict(model.cda.7075, newdata = comb.wv.cda, type="nearest", top_n=100)
-vecs_nns_nuc.100.cda <- emb.cda.7075[nns_wv.cda$term,]
+#nns_wv.cda <- predict(model.cda.7075, newdata = comb.wv.cda, type="nearest", top_n=100)
+#vecs_nns_nuc.100.cda <- emb.cda.7075[nns_wv.cda$term,]
 
 # Create 'proliferation' vector
-pv.cda <- predict(model.cda.7075, newdata = words.prol, type = "embedding")
-pv.cda <- na.omit(pv.cda)
-comb.pv.cda <- colMeans(pv.cda) 
+#pv.cda <- predict(model.cda.7075, newdata = words.prol, type = "embedding")
+#pv.cda <- na.omit(pv.cda)
+#comb.pv.cda <- colMeans(pv.cda) 
 
 # Create 'non-proliferation' vector
-nv.cda <- predict(model.cda.7075, newdata = words.nonprol, type = "embedding")
-nv.cda <- na.omit(nv.cda)
-comb.nv.cda <- colMeans(nv.cda) 
+#nv.cda <- predict(model.cda.7075, newdata = words.nonprol, type = "embedding")
+#nv.cda <- na.omit(nv.cda)
+#comb.nv.cda <- colMeans(nv.cda) 
 
 # Calculate distance (cosine similarity). We use these scores to plot the results
 
 # Create scores for plotting by comparing vectors of 'kernwapen' and proliferation vs non-proliferation
-score_prol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.pv.cda))
-score_nonprol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.nv.cda))
+#score_prol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.pv.cda))
+#score_nonprol.cda <- as.data.frame(word2vec_similarity(vecs_nns_nuc.100.cda, comb.nv.cda))
 
 # Plot the results ----------------------------------------------------------------
 # Set working directory to make sure the outputs appear in the right place
