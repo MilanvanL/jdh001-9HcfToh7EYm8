@@ -14,7 +14,6 @@ library(magrittr)
 library(word2vec)
 library(stringr)
 library(dplyr)
-library(RCurl)
 library(data.table)
 
 # Load the text data
